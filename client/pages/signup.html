@@ -3,36 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Groceries</title>
     <link rel="stylesheet" href="../css/signup.css">
-    <link rel="stylesheet" href="../css/nav.css">
 </head>
 <body>
-    <nav class="navbar">
-        <ul>
-            <li>
-                <a href="./index.html">בית</a>
-            </li>
-            <li>
-                <a href="./login.html">התחברות</a>
-            </li>
-            <li>
-                <a href="./signup.html">הרשמה</a>
-            </li>
-        </ul>
-    </nav>
-    
-    <form action="">
-        שם מלא:
-        <input type="text" id="name" class="name"><br/>
-        אימייל:  
-        <input type="email" id="email" name="email" value=""><br/>
-        סיסמה :  
-        <input type="password" id="password" name="password"><br/>
-        אישור סיסמה :  
-        <input type="password" id="password" name="password"><br/>
+    <custom-nav></custom-nav>
+    <script src="../nav/nav.js"></script>
 
-        <input type="submit" name="submit" id="sumbit">
+    <form id="signupForm">
+        שם מלא:
+        <input type="text" id="name" class="name" placeholder="שם מלא"><br/>
+        אימייל:  
+        <input type="email" id="email" name="email" value="" placeholder="אימייל"><br/>
+        סיסמה :  
+        <input type="password" id="password" name="password" placeholder="סיסמה"><br/>
+        אישור סיסמה :  
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="אישור סיסמה"><br/>
+
+        <input type="submit" name="submit" id="submit" value="הרשמה">
     </form>
+    <script src="../js/signup.js"></script>
 </body>
 </html>

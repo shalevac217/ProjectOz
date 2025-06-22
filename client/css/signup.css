@@ -1,50 +1,42 @@
-/* כללי */
 body {
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-image: url("../images/shoppings.jpg") ;
+  background-color: #fefcfb;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* עיצוב הטופס */
 form {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    width: 350px;
-    text-align: right; /* טקסט בעברית */
+  background-color: #fff;
+  border: 2px solid #7B5FFF;
+  border-radius: 20px;
+  padding: 40px 30px;
+  width: 340px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  text-align: right;
 }
 
-/* עיצוב לשדות הקלט */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 12px;
-    margin: 12px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box; /* כולל את הריפוד בגודל הכללי */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
-/* עיצוב לכפתור שלח */
 input[type="submit"] {
-    width: 100%;
-    padding: 12px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
+  background-color: #5C33F6;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 input[type="submit"]:hover {
-    background-color: #0056b3;
+  background-color: #3D1ECC;
 }

@@ -16,11 +16,17 @@ app.use('/api/list', listRoutes);
 app.use(express.static(clientPath));
 // שולח את index.html כברירת מחדל כאשר נכנסים ל-root
 app.get('/', (req, res) => {
-    res.sendFile(path.join(clientPath, 'signUp.html'));
+    res.sendFile(path.join(clientPath, 'pages', 'index.html'));
+});
+app.get('/nav.html', (req, res) => {
+    res.sendFile(path.join(clientPath, 'nav', 'nav.html'));
+});
+app.get('/nav.css', (req, res) => {
+    res.sendFile(path.join(clientPath, 'nav', 'nav.css'));
 });
 app.get('/:page', (req, res) => {
     const page = req.params.page + '.html';
-    const filePath = path.join(clientPath, page);
+    const filePath = path.join(clientPath, 'pages', page);
 
     res.sendFile(filePath, (err) => {
         if (err) {

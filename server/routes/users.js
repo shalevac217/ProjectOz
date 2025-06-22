@@ -6,10 +6,13 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   console.log('📦 body from client:', req.body); // כאן תראי מה באמת הגיע
 
-  const { username, email, password } = req.body;
+  const { name, email, password } = req.body;
   const sql = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
-  db.query(sql, [username, email, password], (err, result) => {
-    if (err) return res.status(500).json({ error: 'שגיאה ביצירת משתמש' });
+  db.query(sql, [name, email, password], (err, result) => {
+    if (err) {
+      console.error('❌ Error inserting user:', err);
+      return res.status(500).json({ error: 'שגיאה ביצירת משתמש' });
+    }
     res.json({  message: 'משתמש נוצר בהצלחה',success: true, userId: result.insertId  });
 
   });

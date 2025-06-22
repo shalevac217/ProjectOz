@@ -1,0 +1,89 @@
+body {
+  background-color: #fefcfb;
+  font-family: 'Segoe UI', sans-serif;
+  color: #1e1e1e;
+  direction: rtl;
+  margin: 0;
+  padding: 0 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+main {
+  max-width: 600px;
+  margin: 40px auto;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  padding: 30px;
+}
+
+h1 {
+  color: #7B5FFF;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.add-grocery {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+button {
+  background-color: #5C33F6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3D1ECC;
+}
+
+/* רשימת מצרכים */
+#groceriesList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grocery-item {
+  background-color: #f8f6ff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+.grocery-name {
+  flex: 1;
+  text-align: right;
+}
+
+.grocery-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.grocery-actions button {
+  font-size: 0.9rem;
+  padding: 6px 10px;
+}
