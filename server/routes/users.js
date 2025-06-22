@@ -4,15 +4,14 @@ const router = express.Router();
 
 // רישום
 router.post('/register', async (req, res) => {
+  console.log('📦 body from client:', req.body); // כאן תראי מה באמת הגיע
+
   const { username, email, password } = req.body;
-  console.log(req.body)
   const sql = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
   db.query(sql, [username, email, password], (err, result) => {
-    if (err) {
-      console.error(err)
-      return res.status(500).json({ error: 'שגיאה ביצירת משתמש' });
-    }
-    res.json({ message: 'משתמש נוצר בהצלחה' });
+    if (err) return res.status(500).json({ error: 'שגיאה ביצירת משתמש' });
+    res.json({  message: 'משתמש נוצר בהצלחה',success: true, userId: result.insertId  });
+
   });
 });
 
@@ -22,11 +21,8 @@ router.post('/login', (req, res) => {
   const sql = 'SELECT * FROM users WHERE email = ?';
 
   db.query(sql, [email], async (err, results) => {
-  
-    if (err || results.length === 0){ 
-      console.error(err)
-      return res.status(401).json({ error: 'משתמש לא נמצא' });
-    }
+    if (err || results.length === 0) return res.status(401).json({ error: 'משתמש לא נמצא' });
+
     const user = results[0];
 
     if (password==user.password) {

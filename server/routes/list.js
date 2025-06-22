@@ -1,42 +1,49 @@
 const express = require('express');
-const db = require('../db'); // Import the database connection
+const db = require('../db');
 const router = express.Router();
 
-// קבלת פריטים לפי משתמש
+// שליפת כל האירועים של משתמש לפי userId
 router.get('/:userId', (req, res) => {
-  const sql = 'SELECT * FROM list_items WHERE user_id = ?';
+  const sql = 'SELECT * FROM events WHERE userId = ? ORDER BY eventDate DESC';
   db.query(sql, [req.params.userId], (err, results) => {
-    if (err) return res.status(500).json({ error: 'שגיאה בשליפה' });
+    if (err) return res.status(500).json({ error: 'שגיאה בשליפת אירועים' });
     res.json(results);
   });
 });
 
-// הוספה
+// הוספת אירוע חדש
 router.post('/', (req, res) => {
-  const { text, user_id } = req.body;
-  const sql = 'INSERT INTO list_items (text, user_id) VALUES (?, ?)';
-  db.query(sql, [text, user_id], (err, result) => {
-    if (err) return res.status(500).json({ error: 'שגיאה בהוספה' });
-    res.json({ message: 'נוסף בהצלחה', id: result.insertId });
+  const { userId, eventName, eventDate, budget, notes } = req.body;
+  const sql = `
+    INSERT INTO events (userId, eventName, eventDate, budget, notes)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+  db.query(sql, [userId, eventName, eventDate, budget, notes], (err, result) => {
+    if (err) return res.status(500).json({ error: 'שגיאה בהוספת אירוע' });
+    res.json({ message: 'אירוע נוסף בהצלחה', eventId: result.insertId });
   });
 });
 
-// עריכה
+// עריכת אירוע קיים
 router.put('/:id', (req, res) => {
-  const { text } = req.body;
-  const sql = 'UPDATE list_items SET text = ? WHERE id = ?';
-  db.query(sql, [text, req.params.id], (err) => {
-    if (err) return res.status(500).json({ error: 'שגיאה בעדכון' });
-    res.json({ message: 'עודכן בהצלחה' });
+  const { eventName, eventDate, budget, notes } = req.body;
+  const sql = `
+    UPDATE events
+    SET eventName = ?, eventDate = ?, budget = ?, notes = ?
+    WHERE id = ?
+  `;
+  db.query(sql, [eventName, eventDate, budget, notes, req.params.id], (err) => {
+    if (err) return res.status(500).json({ error: 'שגיאה בעדכון אירוע' });
+    res.json({ message: 'האירוע עודכן בהצלחה' });
   });
 });
 
-// מחיקה
+// מחיקת אירוע לפי id
 router.delete('/:id', (req, res) => {
-  const sql = 'DELETE FROM list_items WHERE id = ?';
+  const sql = 'DELETE FROM events WHERE id = ?';
   db.query(sql, [req.params.id], (err) => {
-    if (err) return res.status(500).json({ error: 'שגיאה במחיקה' });
-    res.json({ message: 'נמחק בהצלחה' });
+    if (err) return res.status(500).json({ error: 'שגיאה במחיקת אירוע' });
+    res.json({ message: 'האירוע נמחק בהצלחה' });
   });
 });
 
