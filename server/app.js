@@ -30,7 +30,7 @@ app.get('/:page', (req, res) => {
 
     res.sendFile(filePath, (err) => {
         if (err) {
-            res.status(404).send('Page not found');
+            res.status(404).sendFile(path.join(clientPath, 'pages', '404.html'));
         }
     });
 });

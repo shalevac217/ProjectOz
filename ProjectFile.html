@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>תיק פרויקט – GroceryList</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      direction: rtl;
+      margin: 40px auto;
+      max-width: 950px;
+      line-height: 1.8;
+      background: #f7f7f7;
+      padding: 2rem;
+    }
+    h1, h2, h3 {
+      color: #5c33f6;
+    }
+    pre {
+      background: #eee;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+      direction: ltr;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    p {
+      margin-top: 0.5rem;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📁 תיק פרויקט – GroceryList</h1>
+
+  <h2>1. תיאור כללי</h2>
+  <p>GroceryList היא מערכת אינטרנטית לניהול רשימות קניות. המשתמשים יכולים להירשם, להתחבר, ולהוסיף מצרכים לרשימה אישית. כל משתמש רואה רק את הפריטים שלו, ויכול לבצע CRUD מלא עליהם. המטרה היא להחליף פתקים אבודים באפליקציה נוחה ומאובטחת.</p>
+
+  <h2>2. דרישות</h2>
+  <h3>2.1 פונקציונליות</h3>
+  <ul>
+    <li>הרשמה עם שם, מייל וסיסמה</li>
+    <li>התחברות</li>
+    <li>ניהול רשימת קניות (הוספה, עריכה, מחיקה)</li>
+    <li>שליפת פריטים אישיים</li>
+  </ul>
+
+  <h3>2.2 טכנולוגיות</h3>
+  <ul>
+    <li>Frontend: HTML, CSS, JavaScript</li>
+    <li>Backend: Node.js + Express</li>
+    <li>Database: MySQL</li>
+  </ul>
+
+  <h2>3. ניווט בין מסכים</h2>
+  <ul>
+    <li>/ → עמוד הבית</li>
+    <li>/signup → הרשמה</li>
+    <li>/login → התחברות</li>
+    <li>/groceries → ניהול רשימה</li>
+    <li>/404 → דף שגיאה</li>
+  </ul>
+<h2>🔄 תרשים זרימה - תהליך שימוש באפליקציה</h2>
+<svg width="600" height="520" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill: #e9e9ff; stroke: #5C33F6; stroke-width: 1.5; rx: 10; }
+    .text { font-family: Arial; font-size: 14px; text-anchor: middle; }
+    .arrow { marker-end: url(#arrowhead); stroke: #5C33F6; stroke-width: 1.5; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5"
+            orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C33F6" />
+    </marker>
+  </defs>
+
+  <!-- שלבים -->
+  <rect x="180" y="20" width="240" height="40" class="box" />
+  <text x="300" y="45" class="text">כניסה לאתר</text>
+
+  <rect x="180" y="80" width="240" height="40" class="box" />
+  <text x="300" y="105" class="text">הרשמה / התחברות</text>
+
+  <rect x="180" y="140" width="240" height="40" class="box" />
+  <text x="300" y="165" class="text">שמירת userId ב־localStorage</text>
+
+  <rect x="180" y="200" width="240" height="40" class="box" />
+  <text x="300" y="225" class="text">הפניה לעמוד groceries</text>
+
+  <rect x="180" y="260" width="240" height="40" class="box" />
+  <text x="300" y="285" class="text">טעינת רשימת מצרכים מהשרת</text>
+
+  <rect x="180" y="320" width="240" height="40" class="box" />
+  <text x="300" y="345" class="text">הוספה / עריכה / מחיקה של פריטים</text>
+
+  <rect x="180" y="400" width="240" height="40" class="box" />
+  <text x="300" y="425" class="text">שליחת פעולה ל־API של השרת</text>
+
+  <rect x="180" y="460" width="240" height="40" class="box" />
+  <text x="300" y="485" class="text">רענון הרשימה</text>
+
+  <!-- חצים -->
+  <line x1="300" y1="60" x2="300" y2="80" class="arrow"/>
+  <line x1="300" y1="120" x2="300" y2="140" class="arrow"/>
+  <line x1="300" y1="180" x2="300" y2="200" class="arrow"/>
+  <line x1="300" y1="240" x2="300" y2="260" class="arrow"/>
+  <line x1="300" y1="300" x2="300" y2="320" class="arrow"/>
+  <line x1="300" y1="360" x2="300" y2="400" class="arrow"/>
+  <line x1="300" y1="440" x2="300" y2="460" class="arrow"/>
+</svg>
+
+  <h2>4. קוד והסבר – צד לקוח</h2>
+
+  <h3>4.1 login.js</h3>
+  <pre><code>document.getElementById('loginForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const response = await fetch('/api/users/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await response.json();
+  if (response.ok) {
+    localStorage.setItem('userId', data.userId);
+    window.location.href = '/groceries';
+  } else {
+    alert(data.error || 'Login failed');
+  }
+});</code></pre>
+
+  <p>
+    קוד זה מנהל את תהליך ההתחברות – מאזין לטופס, שולף ערכים, ושולח אותם לשרת.  
+    אם ההתחברות הצליחה, מזהה המשתמש נשמר ואנו מועברים לעמוד groceries.
+  </p>
+
+  <h3>4.2 signup.js</h3>
+  <pre><code>document.getElementById('signupForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (password !== confirmPassword) {
+    alert("הסיסמאות אינן תואמות");
+    return;
+  }
+
+  const response = await fetch('/api/users/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, password })
+  });
+
+  const data = await response.json();
+  localStorage.setItem('userId', data.userId);
+  window.location.href = '/groceries';
+});</code></pre>
+
+  <p>
+    קוד זה מבצע ולידציה לסיסמאות ולאחר מכן שולח את נתוני ההרשמה לשרת.  
+    אם ההרשמה הצליחה, נשמר userId והמשתמש מועבר לעמוד הרשימה.
+  </p>
+
+  <h3>4.3 groceries.js</h3>
+  <pre><code>document.addEventListener("DOMContentLoaded", () => {
+  const userId = localStorage.getItem("userId");
+  fetch(`/api/list/${userId}`)
+    .then(res => res.json())
+    .then(data => renderGroceries(data));
+});
+
+function addGrocery() {
+  const text = document.getElementById("groceryName").value;
+  const userId = localStorage.getItem("userId");
+
+  fetch("/api/list", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, userId })
+  }).then(() => location.reload());
+}</code></pre>
+
+  <p>
+    לאחר טעינת הדף, נשלחת בקשה לשליפת המצרכים של המשתמש.  
+    ניתן להוסיף פריט חדש דרך addGrocery – שנשמר במסד הנתונים.
+  </p>
+
+  <h2>5. קוד והסבר – צד שרת</h2>
+
+  <h3>5.1 users.js</h3>
+  <pre><code>// רישום
+router.post('/register', (req, res) => {
+  const { name, email, password } = req.body;
+  db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+    [name, email, password], (err, result) => {
+      if (err) return res.status(500).json({ error: 'שגיאה ביצירת משתמש' });
+      res.json({ message: 'משתמש נוצר בהצלחה', userId: result.insertId });
+  });
+});
+
+// התחברות
+router.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+    if (err || results.length === 0) return res.status(401).json({ error: 'משתמש לא נמצא' });
+
+    const user = results[0];
+    if (password == user.password) {
+      res.json({ message: 'התחברת בהצלחה', userId: user.id });
+    } else {
+      res.status(401).json({ error: 'סיסמה שגויה' });
+    }
+  });
+});</code></pre>
+
+  <p>
+    בקשת POST אחת מוסיפה משתמש חדש, והשנייה בודקת התחברות קיימת.  
+    לאחר התחברות תקינה מוחזר userId לזיהוי בצד הקליינט.
+  </p>
+
+  <h3>5.2 list.js</h3>
+  <pre><code>// שליפה
+router.get('/:userId', (req, res) => {
+  db.query('SELECT * FROM list_items WHERE user_id = ?', [req.params.userId], (err, results) => {
+    if (err) return res.status(500).json({ error: 'שגיאה בשליפה' });
+    res.json(results);
+  });
+});
+
+// הוספה
+router.post('/', (req, res) => {
+  const { text, userId } = req.body;
+  db.query('INSERT INTO list_items (text, user_id) VALUES (?, ?)', [text, userId], (err, result) => {
+    if (err) return res.status(500).json({ error: 'שגיאה בהוספה' });
+    res.json({ message: 'נוסף בהצלחה', id: result.insertId });
+  });
+});</code></pre>
+
+  <p>
+    הנתיבים האלו שולפים פריטים לפי משתמש ומוסיפים פריט חדש לרשימת המשתמש במסד הנתונים.  
+    בקריאה GET – מתבצעת שאילתה על פי userId ונשלפת רשימת המצרכים.  
+    בקריאה POST – מתווסף פריט חדש לשורת הטבלה עם הקישור למשתמש הרלוונטי.
+  </p>
+
+  <h3>5.3 list.js – עדכון פריט (PUT)</h3>
+  <pre><code>router.put('/:id', (req, res) => {
+  const { text } = req.body;
+  db.query('UPDATE list_items SET text = ? WHERE id = ?', [text, req.params.id], (err) => {
+    if (err) return res.status(500).json({ error: 'שגיאה בעדכון' });
+    res.json({ message: 'עודכן בהצלחה' });
+  });
+});</code></pre>
+
+  <p>
+    בקשת PUT מאפשרת למשתמש לעדכן את שם המצרך עבור פריט מסוים.  
+    הפריט מזוהה לפי מזהה (id) והטקסט החדש נשלח לגוף הבקשה.  
+    אם העדכון מצליח – השרת מאשר את השינוי ומחזיר הודעת הצלחה.
+  </p>
+
+  <h3>5.4 list.js – מחיקת פריט (DELETE)</h3>
+  <pre><code>router.delete('/:id', (req, res) => {
+  db.query('DELETE FROM list_items WHERE id = ?', [req.params.id], (err) => {
+    if (err) return res.status(500).json({ error: 'שגיאה במחיקה' });
+    res.json({ message: 'נמחק בהצלחה' });
+  });
+});</code></pre>
+
+  <p>
+    קוד זה משמש למחיקת פריט מהרשימה של המשתמש לפי מזהה (id).  
+    ברגע שנלחץ כפתור "מחק", מתבצעת קריאת DELETE אל השרת.  
+    אם המחיקה בוצעה בהצלחה – המידע נמחק מהמסד והקליינט מקבל אישור.
+  </p>
+
+  <h2>6. מסד נתונים – SetProject.sql</h2>
+  <pre><code>CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE list_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  text VARCHAR(255) NOT NULL,
+  user_id INT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);</code></pre>
+
+  <p>
+    המסד בנוי משתי טבלאות: users ו־list_items.  
+    טבלת users שומרת את פרטי המשתמשים עם אימייל ייחודי.  
+    טבלת list_items כוללת פריטים שכל אחד מהם מקושר למשתמש באמצעות מפתח זר.  
+    כך כל משתמש מקבל הפרדה ברורה ואישית לפריטי הרשימה שלו.
+  </p>
+
+  <h2>7. אבטחת מידע וולידציה</h2>
+  <ul>
+    <li>ולידציה בצד הלקוח: בדיקה של שדות ריקים, אימייל תקין, סיסמה תואמת</li>
+    <li>טיפול בשגיאות בשרת: החזרת תשובות משמעותיות במקרה של בעיות במסד</li>
+    <li>מומלץ: להטמיע bcrypt להצפנת סיסמאות לפני שמירתן במסד</li>
+    <li>מומלץ: להשתמש ב־JWT לצורך ניהול הרשאות וגישה מאובטחת</li>
+    <li>שימוש ב־localStorage נשמר כפתרון זמני לצורך שמירת מזהה המשתמש</li>
+  </ul>
+
+  <h2>8. הפקת לקחים</h2>
+  <ul>
+    <li>למדתי איך לבנות מערכת Client-Server עם אינטראקציה מלאה</li>
+    <li>שימוש ב־MySQL איפשר לי להבין איך לבנות ולתחזק מסד נתונים רלציוני</li>
+    <li>עבודה עם fetch ו־Express העניקה לי הבנה עמוקה ב־REST API</li>
+    <li>הבנתי את חשיבות האבטחה – במיוחד כשמדובר בסיסמאות ונתונים רגישים</li>
+    <li>בעתיד אשפר את המערכת עם אימותים חזקים יותר וחוויית משתמש משופרת</li>
+  </ul>
+
+  <h2>9. סיכום</h2>
+  <p>
+    
+ היא מערכת בסיסית אך שלמה לניהול רשימות קניות מותאמות אישית.  
+    היא משלבת טכנולוגיות פופולריות כמו HTML, JS, Node.js ו־MySQL ליצירת אפליקציית Web תפקודית.  
+    הפרויקט פותח את הדלת להרחבות עתידיות כמו קטגוריות, תצוגות מתקדמות, או חיבור לחשבון Google.  
+    העבודה עליו חידדה את מיומנויותיי במבנה פרויקט, עבודה בצוותים והקפדה על אבטחת משתמשים.
+  </p>
+
+</body>
+</html>
